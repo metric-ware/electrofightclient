@@ -1,0 +1,688 @@
+:root {
+  --canvas: #0B1620;
+  --grid: #D6A23A;
+  --panel: #1B252D;
+  --border: #2D3A43;
+  --text: #E6EDF2;
+  --muted: rgba(230, 237, 242, 0.62);
+  --panel-soft: rgba(27, 37, 45, 0.88);
+  --panel-glass: rgba(27, 37, 45, 0.72);
+  --grid-soft: rgba(214, 162, 58, 0.14);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: var(--canvas);
+  color: var(--text);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-weight: 650;
+  font-size: 16px;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+#game {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  cursor: default;
+  background: var(--canvas);
+}
+
+#joinScreen {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 22% 18%, rgba(126, 178, 197, 0.2), transparent 28%),
+    radial-gradient(circle at 78% 84%, rgba(45, 58, 67, 0.64), transparent 36%),
+    var(--canvas);
+}
+
+#joinScreen::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  opacity: 0.52;
+  background-image:
+    linear-gradient(rgba(126, 178, 197, 0.24) 2px, transparent 2px),
+    linear-gradient(90deg, rgba(126, 178, 197, 0.24) 2px, transparent 2px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(circle at center, black 0 46%, transparent 78%);
+}
+
+#joinScreen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(11, 22, 32, 0.12), rgba(11, 22, 32, 0.72));
+}
+
+#lobbyShell {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(320px, 560px) minmax(320px, 430px);
+  gap: 34px;
+  align-items: stretch;
+  width: min(1060px, calc(100vw - 40px));
+}
+
+#lobbyMap,
+#joinForm,
+#leaderboard,
+#clanPanel,
+#clanRequestsPopup,
+#upgradePanel,
+#energyCounter,
+#fpsCounter,
+#buildBar button,
+#clanButton,
+#chatOverlay,
+#notice {
+  background: var(--panel-soft);
+  border: 1px solid var(--border);
+  color: var(--text);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.22);
+}
+
+#lobbyMap {
+  position: relative;
+  min-height: 500px;
+  overflow: hidden;
+  border: 3px solid rgba(126, 178, 197, 0.58);
+  background: var(--canvas);
+}
+
+.lobbyGrid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(126, 178, 197, 0.5) 2px, transparent 2px),
+    linear-gradient(90deg, rgba(126, 178, 197, 0.5) 2px, transparent 2px);
+  background-size: 72px 72px;
+  background-position: 26px 28px;
+}
+
+.lobbyGrid::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 35% 46%, rgba(126, 178, 197, 0.12), transparent 0 22%, rgba(11, 22, 32, 0.42) 74%),
+    linear-gradient(180deg, rgba(11, 22, 32, 0), rgba(11, 22, 32, 0.42));
+}
+
+.lobbyTerritory {
+  display: none;
+}
+
+
+.lobbyBase {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 178px;
+  height: 178px;
+  border: 4px solid var(--grid);
+  background: rgba(27, 37, 45, 0.92);
+  color: var(--text);
+  font-size: 30px;
+  font-weight: 1000;
+  letter-spacing: 0.18em;
+  line-height: 1;
+  text-transform: uppercase;
+  text-shadow: 0 3px 16px rgba(0, 0, 0, 0.52);
+}
+
+.baseAlly {
+  left: 8%;
+  bottom: 18%;
+  border-color: #5CE3A1;
+  color: #5CE3A1;
+  box-shadow: inset 0 0 0 1px rgba(92, 227, 161, 0.18), 0 0 34px rgba(92, 227, 161, 0.12);
+}
+
+.baseEnemy {
+  right: 7%;
+  top: 18%;
+  border-color: #FF6B6B;
+  color: #FF6B6B;
+  box-shadow: inset 0 0 0 1px rgba(255, 107, 107, 0.18), 0 0 34px rgba(255, 107, 107, 0.12);
+}
+
+.lobbySprite {
+  position: absolute;
+  width: 216px;
+  height: 216px;
+  object-fit: contain;
+  pointer-events: none;
+  filter: drop-shadow(0 18px 24px rgba(0, 0, 0, 0.32));
+}
+
+.lobbyAlly {
+  left: 14%;
+  bottom: 9%;
+  transform: rotate(42deg);
+}
+
+.lobbyEnemy {
+  right: 13%;
+  top: 8%;
+  transform: rotate(222deg);
+}
+
+
+#joinForm {
+  display: grid;
+  align-content: center;
+  gap: 14px;
+  padding: 38px;
+  background: rgba(27, 37, 45, 0.94);
+}
+
+#menuEyebrow {
+  color: var(--grid);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+#menuTitle {
+  color: var(--text);
+  font-size: clamp(44px, 6vw, 68px);
+  line-height: 0.95;
+  font-weight: 900;
+  letter-spacing: -0.06em;
+}
+
+#menuCopy {
+  margin: 0 0 12px;
+  color: var(--grid);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+#joinForm label {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+#nameInput,
+#serverSelect,
+#joinForm button,
+#chatInput,
+#statusPanel button,
+#buildBar button,
+#clanPanel button,
+#clanPanel input,
+#upgradePanel button,
+#clanRequestsPopup button {
+  min-height: 42px;
+  border: 1px solid var(--border);
+  padding: 0 12px;
+  color: var(--text);
+  background: #1B252D;
+  outline: none;
+}
+
+#nameInput:focus,
+#serverSelect:focus,
+#clanPanel input:focus,
+#chatInput:focus {
+  border-color: var(--grid);
+  box-shadow: 0 0 0 3px rgba(214, 162, 58, 0.12);
+}
+
+#serverSelect {
+  color-scheme: dark;
+}
+
+#joinForm button {
+  margin-top: 6px;
+  border-color: var(--grid);
+  background: var(--grid);
+  color: var(--canvas);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+#menuStatus {
+  min-height: 22px;
+  color: var(--grid);
+  font-size: 14px;
+  font-weight: 800;
+  text-align: center;
+}
+
+#joinForm button:hover,
+#statusPanel button:hover,
+#buildBar button:hover,
+#clanPanel button:hover,
+#upgradePanel button:hover,
+#clanRequestsPopup button:hover,
+#buildBar button.selected {
+  border-color: var(--grid);
+  background: rgba(214, 162, 58, 0.16);
+  color: var(--text);
+}
+
+#joinForm button:hover {
+  background: #D6A23A;
+  color: var(--canvas);
+  filter: brightness(1.06);
+}
+
+#hud {
+  position: fixed;
+  inset: 0;
+  display: none;
+  color: var(--text);
+  user-select: none;
+  pointer-events: none;
+}
+
+#statusPanel {
+  display: contents;
+}
+
+#statusPanel button,
+#buildBar button,
+#clanPanel,
+#clanPanel button,
+#clanPanel input,
+#clanRequestsPopup,
+#clanRequestsPopup button,
+#upgradePanel,
+#upgradePanel button,
+#chatOverlay,
+#chatInput {
+  pointer-events: auto;
+}
+
+#energyCounter {
+  position: fixed;
+  left: 50%;
+  bottom: 104px;
+  transform: translateX(-50%);
+  min-height: 38px;
+  padding: 6px 16px;
+  display: grid;
+  place-items: center;
+  color: var(--grid);
+  font-size: 18px;
+  font-weight: 900;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+#fpsCounter {
+  position: fixed;
+  right: 16px;
+  bottom: 214px;
+  padding: 8px 12px;
+  color: var(--text);
+  font-size: 21px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  pointer-events: none;
+}
+
+#clanButton {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  width: 102px;
+  font-size: 14px;
+  font-weight: 850;
+  pointer-events: auto;
+}
+
+#buildBar {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;
+  gap: 10px;
+  max-width: calc(100vw - 24px);
+  overflow-x: auto;
+  transform: translateX(-50%);
+  pointer-events: auto;
+}
+
+#buildBar button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 72px;
+  min-width: max-content;
+  padding: 0 14px;
+  text-align: left;
+  white-space: nowrap;
+  font-size: 15px;
+  font-weight: 850;
+  background: rgba(27, 37, 45, 0.9);
+}
+
+#buildBar button.selected {
+  box-shadow: 0 0 0 2px rgba(214, 162, 58, 0.2), 0 18px 60px rgba(0, 0, 0, 0.22);
+}
+
+#buildBar img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+#buildBar .buildKey {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--border);
+  color: var(--grid);
+  background: var(--canvas);
+  font-size: 13px;
+}
+
+#buildBar strong {
+  white-space: nowrap;
+}
+#buildBar .buildText {
+  display: grid;
+  gap: 3px;
+}
+#buildBar .buildLimit {
+  color: var(--muted);
+  font-size: 12px;
+  font-style: normal;
+  white-space: nowrap;
+}
+
+#leaderboard {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  width: 268px;
+  padding: 10px;
+}
+
+#leaderboardTitle {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+  color: var(--grid);
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.leaderboardRow,
+.clanRow,
+.requestRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+}
+
+.leaderboardRow {
+  margin-top: 7px;
+  padding: 6px 8px;
+  border: 1px solid rgba(45, 58, 67, 0.68);
+  background: rgba(11, 22, 32, 0.48);
+  color: var(--text);
+  font-size: 14px;
+}
+
+.leaderboardRow span:last-child {
+  color: var(--grid);
+}
+
+.leaderboardRow.rank1 span:first-child,
+.leaderboardRow.rank2 span:first-child,
+.leaderboardRow.rank3 span:first-child {
+  color: var(--text);
+}
+
+#minimap {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  width: 196px;
+  height: 196px;
+  display: block;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  pointer-events: none;
+}
+
+#notice {
+  display: none;
+  position: fixed;
+  top: 64px;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: min(360px, calc(100vw - 40px));
+  padding: 10px 14px;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 900;
+  text-align: center;
+  pointer-events: none;
+}
+#chatOverlay {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 7;
+  width: min(340px, calc(100vw - 32px));
+  padding: 8px;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  transform: translate(-50%, -50%);
+}
+#chatInput {
+  width: 100%;
+  min-height: 46px;
+  background: var(--canvas);
+  color: var(--text);
+  font-size: 18px;
+  font-weight: 800;
+  user-select: text;
+}
+#chatInput::placeholder {
+  color: var(--muted);
+}
+
+#upgradePanel {
+  position: fixed;
+  display: none;
+  min-width: 190px;
+  padding: 10px;
+  z-index: 4;
+}
+
+#upgradePanel .title,
+#clanPanel .title,
+#clanRequestsPopup .title {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+  color: var(--grid);
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+#upgradePanel .meta,
+#clanPanel .meta,
+#clanRequestsPopup .meta {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+#upgradePanel button {
+  width: 100%;
+  margin-top: 8px;
+}
+
+#clanPanel {
+  position: fixed;
+  top: 66px;
+  left: 16px;
+  display: none;
+  width: min(320px, calc(100vw - 32px));
+  max-height: calc(100vh - 96px);
+  overflow: auto;
+  padding: 10px;
+  z-index: 5;
+}
+
+#clanPanel input {
+  width: 100%;
+  margin: 8px 0;
+}
+
+#clanPanel button {
+  min-height: 32px;
+}
+
+.clanSection {
+  display: grid;
+  gap: 7px;
+  margin-top: 8px;
+}
+
+.clanBlock,
+.clanRequest {
+  display: grid;
+  gap: 6px;
+  padding: 8px;
+  border: 1px solid rgba(45, 58, 67, 0.68);
+  background: rgba(11, 22, 32, 0.48);
+  color: var(--text);
+  font-size: 13px;
+}
+
+.clanRow,
+.requestRow {
+  min-height: 32px;
+  padding: 6px 8px;
+  border: 1px solid rgba(45, 58, 67, 0.68);
+  background: rgba(11, 22, 32, 0.48);
+  font-size: 13px;
+}
+
+.requestActions {
+  display: flex;
+  gap: 5px;
+}
+
+.requestActions button {
+  width: 34px;
+  min-height: 30px;
+}
+
+#clanRequestsPopup {
+  position: fixed;
+  right: 16px;
+  display: none;
+  width: 268px;
+  gap: 7px;
+  padding: 10px;
+  z-index: 6;
+}
+
+@media (max-width: 760px) {
+  #lobbyShell {
+    grid-template-columns: 1fr;
+    width: min(430px, calc(100vw - 28px));
+  }
+
+  #lobbyMap {
+    min-height: 240px;
+  }
+
+  .lobbyBase {
+    width: 132px;
+    height: 132px;
+    border-width: 3px;
+    font-size: 21px;
+  }
+
+  .lobbySprite {
+    width: 168px;
+    height: 168px;
+  }
+
+  .lobbyAlly {
+    left: 6%;
+    bottom: 4%;
+  }
+
+  .lobbyEnemy {
+    right: 6%;
+    top: 4%;
+  }
+
+  #joinForm {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 620px) {
+  #leaderboard {
+    width: min(240px, calc(100vw - 32px));
+  }
+
+  #buildBar {
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    display: flex;
+    overflow-x: auto;
+    transform: none;
+    padding-bottom: 2px;
+  }
+
+  #buildBar button {
+    height: 64px;
+    font-size: 14px;
+  }
+
+  #energyCounter {
+    bottom: 86px;
+  }
+}
