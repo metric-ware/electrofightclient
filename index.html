@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Electrofight</title>
+    <title>Electrofight.org</title>
     <link rel="icon" type="image/png" href="sprites/logo.png" />
     <link rel="stylesheet" href="style.css" />
   </head>
@@ -39,7 +39,10 @@
           />
           <label for="serverSelect">Server</label>
           <select id="serverSelect">
-            <option value="wss://eu.electrofight.org">London</option>
+            <option value="wss://eu.electrofight.org">Europe</option>
+                        <!--
+            <option value="ws://localhost:3000">Localhost</option>
+                        -->
           </select>
           <button type="submit">play game</button>
           <div id="menuStatus"></div>
@@ -48,7 +51,12 @@
     </div>
     <div id="hud">
       <div id="statusPanel">
-        <div id="energyCounter">Energy 1000 / 1000</div>
+        <div id="energyCounter">
+          <span
+            >Energy <strong id="energyAmount">1000</strong> /
+            <strong id="energyMax">1000</strong></span
+          ><span>Score <strong id="scoreAmount">0</strong></span>
+        </div>
         <div id="fpsCounter">FPS: 0 TPS: 0</div>
         <button id="clanButton" type="button">Clan</button>
       </div>
