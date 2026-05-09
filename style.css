@@ -4,6 +4,7 @@
   --panel: #1B252D;
   --border: #2D3A43;
   --text: #E6EDF2;
+  --enemy: #FF5F6C;
   --muted: rgba(230, 237, 242, 0.62);
   --panel-soft: rgba(27, 37, 45, 0.88);
   --panel-glass: rgba(27, 37, 45, 0.72);
@@ -12,6 +13,10 @@
 
 * {
   box-sizing: border-box;
+  scrollbar-width: none;
+}
+*::-webkit-scrollbar {
+  display: none;
 }
 
 html,
@@ -331,15 +336,27 @@ button {
   left: 50%;
   bottom: 104px;
   transform: translateX(-50%);
-  min-height: 38px;
-  padding: 6px 16px;
-  display: grid;
-  place-items: center;
-  color: var(--grid);
-  font-size: 18px;
+  min-height: 48px;
+  padding: 8px 20px;
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+  font-size: 24px;
   font-weight: 900;
   pointer-events: none;
   white-space: nowrap;
+}
+#energyCounter strong {
+  font-weight: 900;
+}
+#energyAmount,
+#energyMax {
+  color: var(--grid);
+}
+#scoreAmount {
+  color: var(--enemy);
 }
 
 #fpsCounter {
@@ -416,6 +433,9 @@ button {
 #buildBar strong {
   white-space: nowrap;
 }
+#buildBar .buildCost {
+  color: var(--grid);
+}
 #buildBar .buildText {
   display: grid;
   gap: 3px;
@@ -438,11 +458,14 @@ button {
 #leaderboardTitle {
   padding: 6px 8px;
   border-bottom: 1px solid var(--border);
-  color: var(--grid);
+  color: var(--enemy);
   font-size: 13px;
   font-weight: 900;
   letter-spacing: 0.14em;
   text-transform: uppercase;
+}
+#leaderboardList {
+  overflow: hidden;
 }
 
 .leaderboardRow,
@@ -455,16 +478,27 @@ button {
 }
 
 .leaderboardRow {
-  margin-top: 7px;
-  padding: 6px 8px;
+  padding: 5px 8px;
   border: 1px solid rgba(45, 58, 67, 0.68);
+  border-top: 0;
   background: rgba(11, 22, 32, 0.48);
   color: var(--text);
   font-size: 14px;
 }
+.leaderboardRow:first-child {
+  border-top: 1px solid rgba(45, 58, 67, 0.68);
+}
+.leaderboardRow span:first-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
 .leaderboardRow span:last-child {
-  color: var(--grid);
+  color: var(--enemy);
+  font-weight: 900;
+  white-space: nowrap;
 }
 
 .leaderboardRow.rank1 span:first-child,
@@ -684,5 +718,6 @@ button {
 
   #energyCounter {
     bottom: 86px;
+    font-size: 20px;
   }
 }
